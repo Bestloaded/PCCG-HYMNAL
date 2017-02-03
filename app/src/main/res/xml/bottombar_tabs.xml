@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tabs>
     <tab
-        id="@+id/tab_index"
-        icon="@drawable/ic_index"
-        title="Index" />
-    <tab
         id="@+id/tab_favourites"
         icon="@drawable/ic_favourites"
-        title="Favourites" />
+        title="Favourites"/>
+    <tab
+        id="@+id/tab_index"
+        icon="@drawable/ic_index"
+        title="Index"/>
     <tab
         id="@+id/tab_song"
         icon="@drawable/ic_song"

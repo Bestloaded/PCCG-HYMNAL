@@ -1,11 +1,9 @@
 package restorationministries.hymnal;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -14,47 +12,46 @@ import java.util.ArrayList;
  * Created by Keno on 1/31/2017 for Hymnal
  */
 
-class SongAdapter extends ArrayAdapter<Song> {
-    //View lookup cache (performance improvement)
-    private static class ViewHolder {
-        TextView name;
-        TextView number;
+class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
+    private ArrayList<Song> songData;
+
+
+    SongAdapter(ArrayList<Song> songData) {
+        this.songData = songData;
     }
 
-    SongAdapter(Context context, ArrayList<Song> songs) {
-        super(context, 0, songs);
-    }
-
-    @NonNull
+    //Create new views
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        //Get the song's position number
-        Song song = getItem(position);
+    public SongAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        //Create new view
+        View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_song, null);
+        //Create view holder
+        ViewHolder viewHolder = new ViewHolder(itemLayoutView);
+        return viewHolder;
+    }
 
-        //Store views in cache
-        ViewHolder viewHolder;
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+        // Get data from songData at this position
+        // Replace the contents of the view with that songData
+        viewHolder.number.setText(songData.get(position).getNumber());
+        viewHolder.name.setText(songData.get(position).getTitle());
+    }
 
-        //Check if an existing view is being reused, otherwise inflate the view
-        if (convertView == null) {
-            //If there's no view to re-use, inflate a brand new view for row
-            viewHolder = new ViewHolder();
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_song, parent, false);
-            viewHolder.name = (TextView) convertView.findViewById(R.id.tv_songName);
-            viewHolder.number = (TextView) convertView.findViewById(R.id.tv_songNumber);
+    @Override
+    public int getItemCount() {
+        return songData.size();
+    }
 
-            //Cache the view holder object inside the fresh view
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView name;
+        public TextView number;
+
+        public ViewHolder(View itemLayoutView) {
+            super(itemLayoutView);
+            name = (TextView) itemLayoutView.findViewById(R.id.tv_songName);
+            number = (TextView) itemLayoutView.findViewById(R.id.tv_songNumber);
         }
-
-        //Populate the data from the data object via the View Holder object
-        //into the template view.
-        viewHolder.name.setText(song != null ? song.getTitle() : null);
-        viewHolder.number.setText(song != null ? song.getNumber() : null);
-
-        //Return the completed view to render on screen
-        return convertView;
     }
 }

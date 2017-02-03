@@ -15,7 +15,7 @@ import java.util.ArrayList;
 class SongXMLReader {
 
     private Context context;
-    private ArrayList<Song> songs = new ArrayList<>(10);
+    private ArrayList<Song> songs = new ArrayList<>(200);
     private ArrayList<String> verses = new ArrayList<>(5);
     volatile boolean parsingComplete = false;
 

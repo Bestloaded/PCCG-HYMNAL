@@ -1,14 +1,16 @@
 package restorationministries.hymnal;
 
-import android.app.ListFragment;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
+import android.widget.Toast;
 
 import org.parceler.Parcels;
 
@@ -18,31 +20,50 @@ import java.util.ArrayList;
  * Created by Keno on 1/31/2017 for Hymnal
  */
 
-public class IndexFragment extends ListFragment implements OnItemClickListener {
+public class IndexFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        /**
-         * Inflate the layout for this fragment
-         */
+        View rootView = inflater.inflate(R.layout.index_fragment, container, false);
+        NestedScrollView nsv = (NestedScrollView) rootView.findViewById(R.id.nestedScrollView);
+        nsv.setNestedScrollingEnabled(false);
+        //Get Reference to recycler View
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(android.R.id.list);
+        //Set Layout Manager
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        Toast.makeText(getContext(), "Item #" + position + " touched" , Toast.LENGTH_SHORT).show();
+                    }
+                })
+        );
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
+        //Data for the Recycler View
         Bundle bundle = this.getArguments();
         ArrayList<Song> songs = null;
         if (bundle != null) {
             songs = Parcels.unwrap(getArguments().getParcelable("SongList"));
         }
 
-        View view = inflater.inflate(R.layout.index_fragment, container, false);
-        SongAdapter adapter = new SongAdapter(getActivity(), songs);
+        //Create an adapter
+        SongAdapter adapter = new SongAdapter(songs);
+        //Set adapter
+        recyclerView.setAdapter(adapter);
+        //Set item animator to default
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        //Attach the adapter to list view
-        ListView listView = (ListView) view.findViewById(android.R.id.list);
-        listView.setAdapter(adapter);
+        return rootView;
 
-        return view;
     }
 
-    @Override
+    /*@Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Snackbar.make(getListView(), "Song Selected!", Snackbar.LENGTH_SHORT);
-    }
+    }*/
 }

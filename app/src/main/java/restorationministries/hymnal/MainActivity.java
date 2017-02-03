@@ -1,15 +1,13 @@
 package restorationministries.hymnal;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.IdRes;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabSelectListener;
+import com.roughike.bottombar.OnTabReselectListener;
 
 import org.parceler.Parcels;
 
@@ -39,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         bundle.putParcelable("SongList", listParceable);
 
         //Create each fragment to be displayed
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         IndexFragment indexFragment = new IndexFragment();
         indexFragment.setArguments(bundle);
 
@@ -49,18 +47,18 @@ public class MainActivity extends AppCompatActivity {
 
         //Set up bottom bar listeners
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+        bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
             @Override
-            public void onTabSelected(@IdRes int tabId) {
+            public void onTabReSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_favourites) {
-                    Snackbar snackbar = Snackbar.make(findViewById(R.id.contentContainer), "Favourites selected", Snackbar.LENGTH_LONG);
-                    snackbar.show();
+                    Toast toast = Toast.makeText(getApplicationContext(), "Favourites Selected", Toast.LENGTH_SHORT);
+                    toast.show();
                 } else if (tabId == R.id.tab_song) {
-                    Snackbar snackbar = Snackbar.make(findViewById(R.id.contentContainer), "Song selected", Snackbar.LENGTH_LONG);
-                    snackbar.show();
+                    Toast toast = Toast.makeText(getApplicationContext(), "Song Selected", Toast.LENGTH_SHORT);
+                    toast.show();
                 } else if (tabId == R.id.tab_index) {
-                Snackbar snackbar = Snackbar.make(findViewById(R.id.contentContainer), "Index selected", Snackbar.LENGTH_LONG);
-                snackbar.show();
+                    Toast toast = Toast.makeText(getApplicationContext(), "Index Selected", Toast.LENGTH_SHORT);
+                    toast.show();
                 }
             }
         });
