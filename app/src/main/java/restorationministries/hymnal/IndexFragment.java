@@ -2,7 +2,6 @@ package restorationministries.hymnal;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.parceler.Parcels;
 
@@ -25,22 +23,26 @@ public class IndexFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.index_fragment, container, false);
-        NestedScrollView nsv = (NestedScrollView) rootView.findViewById(R.id.nestedScrollView);
-        nsv.setNestedScrollingEnabled(false);
+
         //Get Reference to recycler View
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(android.R.id.list);
         //Set Layout Manager
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.setAutoMeasureEnabled(true);
         recyclerView.setLayoutManager(layoutManager);
+
+        //Create touch listeners
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        Toast.makeText(getContext(), "Item #" + position + " touched" , Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), "Item #" + position + " touched" , Toast.LENGTH_SHORT).show();
+
                     }
                 })
         );
 
+        //Create dividers between items
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
@@ -52,18 +54,15 @@ public class IndexFragment extends Fragment {
         }
 
         //Create an adapter
-        SongAdapter adapter = new SongAdapter(songs);
+        SongAdapter adapter = new SongAdapter(songs, getContext());
         //Set adapter
         recyclerView.setAdapter(adapter);
+        //Because item list won't be changed, free spped improvement
+        recyclerView.setHasFixedSize(true);
         //Set item animator to default
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         return rootView;
 
     }
-
-    /*@Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Snackbar.make(getListView(), "Song Selected!", Snackbar.LENGTH_SHORT);
-    }*/
 }

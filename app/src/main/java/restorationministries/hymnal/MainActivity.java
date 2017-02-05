@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabReselectListener;
+import com.roughike.bottombar.OnTabSelectListener;
 
 import org.parceler.Parcels;
 
@@ -42,23 +42,22 @@ public class MainActivity extends AppCompatActivity {
         IndexFragment indexFragment = new IndexFragment();
         indexFragment.setArguments(bundle);
 
-        fragmentTransaction.add(R.id.contentContainer, indexFragment, "indexFragment");
+        //Adds them to the fragment manager
+        fragmentTransaction.add(R.id.fragmentContainer, indexFragment, "indexFragment");
         fragmentTransaction.commit();
 
         //Set up bottom bar listeners
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
-        bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
+        bottomBar.setDefaultTab(R.id.tab_index);
+        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
-            public void onTabReSelected(@IdRes int tabId) {
+            public void onTabSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_favourites) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Favourites Selected", Toast.LENGTH_SHORT);
-                    toast.show();
+                    Toast.makeText(MainActivity.this, "Favourites Selected", Toast.LENGTH_SHORT).show();
                 } else if (tabId == R.id.tab_song) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Song Selected", Toast.LENGTH_SHORT);
-                    toast.show();
+                    Toast.makeText(MainActivity.this, "Song Selected", Toast.LENGTH_SHORT).show();
                 } else if (tabId == R.id.tab_index) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Index Selected", Toast.LENGTH_SHORT);
-                    toast.show();
+                    Toast.makeText(MainActivity.this, "Index Selected", Toast.LENGTH_SHORT).show();
                 }
             }
         });
