@@ -3,10 +3,14 @@ package restorationministries.hymnal;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.IdRes;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import org.parceler.Parcels;
@@ -38,26 +42,51 @@ public class MainActivity extends AppCompatActivity {
 
         //Create each fragment to be displayed
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        IndexFragment indexFragment = new IndexFragment();
+        final android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        //Index Fragment
+        final IndexFragment indexFragment = new IndexFragment();
         indexFragment.setArguments(bundle);
 
-        //Adds them to the fragment manager
+        //Song Fragment
+        final SongFragment songFragment = new SongFragment();
+        songFragment.setArguments(bundle);
+
+        //Adds default fragment to the fragment manager
         fragmentTransaction.add(R.id.fragmentContainer, indexFragment, "indexFragment");
         fragmentTransaction.commit();
 
         //Set up bottom bar listeners
-        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        final BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setDefaultTab(R.id.tab_index);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_favourites) {
                     Toast.makeText(MainActivity.this, "Favourites Selected", Toast.LENGTH_SHORT).show();
-                } else if (tabId == R.id.tab_song) {
-                    Toast.makeText(MainActivity.this, "Song Selected", Toast.LENGTH_SHORT).show();
                 } else if (tabId == R.id.tab_index) {
-                    Toast.makeText(MainActivity.this, "Index Selected", Toast.LENGTH_SHORT).show();
+                    getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                            .replace(R.id.fragmentContainer, indexFragment, "indexFragment")
+                            .commit();
+                } else if (tabId == R.id.tab_song) {
+                    getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                            .replace(R.id.fragmentContainer, songFragment, "songFragment")
+                            .commit();
+                }
+            }
+        });
+        bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
+            @Override
+            public void onTabReSelected(@IdRes int tabId) {
+                if (tabId == R.id.tab_favourites) {
+                    Toast.makeText(MainActivity.this, "Favourites Re-Selected", Toast.LENGTH_SHORT).show();
+                } else if (tabId == R.id.tab_index) {
+                    RecyclerView recyclerView = (RecyclerView) findViewById(android.R.id.list);
+                    recyclerView.smoothScrollToPosition(0);
+                } else if (tabId == R.id.tab_song) {
+                    NestedScrollView nestedScrollView = (NestedScrollView) findViewById(R.id.song_nestedScrollView);
+                    nestedScrollView.fullScroll(View.FOCUS_UP);
                 }
             }
         });
