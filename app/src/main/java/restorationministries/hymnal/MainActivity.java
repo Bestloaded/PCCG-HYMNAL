@@ -1,5 +1,6 @@
 package restorationministries.hymnal;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.IdRes;
@@ -53,20 +54,26 @@ public class MainActivity extends AppCompatActivity {
             songs = songDatabase.getSongList();
         }
 
-        //Populates the list of song suggestions for searching
-        songSuggestions = new ArrayList<>(100);
-        for (Song song : songs) {
-            songSuggestions.add(song.getTitle());
-        }
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                //Populates the list of song suggestions for searching
+                songSuggestions = new ArrayList<>(443);
+                for (Song song : songs) {
+                    songSuggestions.add(song.getTitle());
+                }
+            }
+        });
+
+
+        //Create each fragment to be displayed
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        final android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         //Create bundle to be passed around
         Bundle bundle = new Bundle();
         Parcelable listParceable = Parcels.wrap(songs);
         bundle.putParcelable("SongList", listParceable);
-
-        //Create each fragment to be displayed
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        final android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         //Index Fragment
         final IndexFragment indexFragment = new IndexFragment();
@@ -117,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         //Creates the searchView functions
         searchView = (MaterialSearchView) findViewById(R.id.search_view);
         searchView.addSuggestions(songSuggestions);
@@ -126,16 +134,17 @@ public class MainActivity extends AppCompatActivity {
                 String suggestion = searchView.getSuggestionAtPosition(position);
                 searchView.setQuery(suggestion, true);
                 int i = 0;
+                Bundle bundle;
                 for (String title : songSuggestions) {
                     if (title.equals(suggestion)) {
-                        Bundle bundle = songFragment.getArguments();
+                        bundle = songFragment.getArguments();
                         bundle.putInt("Song Number", i);
                         //TODO: Ensure correct song is displayed each time
 
                         bottomBar.selectTabAtPosition(2, false);
                         bottomBar.animate().translationY(0.0f);
                         Fragment songFrag = getSupportFragmentManager().findFragmentByTag("songFragment");
-                        FragmentTransaction ft =  getSupportFragmentManager().beginTransaction();
+                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                         if (songFrag != null) {
                             ft.detach(songFragment);
                             ft.attach(songFragment);
@@ -149,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     @Override

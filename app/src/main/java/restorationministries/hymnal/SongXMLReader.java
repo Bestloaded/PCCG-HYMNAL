@@ -14,8 +14,7 @@ import java.util.ArrayList;
 
 class SongXMLReader {
 
-    private Context context;
-    private ArrayList<Song> songs = new ArrayList<>(200);
+    private ArrayList<Song> songs = new ArrayList<>(443);
     private ArrayList<String> verses = new ArrayList<>(5);
     volatile boolean parsingComplete = false;
 
@@ -28,7 +27,6 @@ class SongXMLReader {
             @Override
             public void run() {
                 try {
-                    context = ctx;
                     XmlPullParser myParser = ctx.getResources().getXml(R.xml.songs);
                     parseXmlAndStoreIt(myParser);
                 }
@@ -53,13 +51,15 @@ class SongXMLReader {
         String title = "";
         String verse;
         String author = "";
+        String name;
+        Song newSong = new Song();
 
         try {
             event = myParser.getEventType();
 
             while (event != XmlPullParser.END_DOCUMENT) {
                 verse = "";
-                String name = myParser.getName();
+                name = myParser.getName();
                 switch (event) {
                     case XmlPullParser.START_TAG:
                         break;
@@ -92,7 +92,6 @@ class SongXMLReader {
                                 chorus = chorus.replaceAll("\\*\\* ", System.getProperty("line.separator"));
                                 break;
                             case "song":
-                                Song newSong = new Song();
                                 newSong.setTitle(title);
                                 newSong.setChorus(chorus);
                                 newSong.setNumber(number);
@@ -106,6 +105,7 @@ class SongXMLReader {
                                 title = "";
                                 author = "";
                                 verses.clear();
+                                newSong = new Song();
                                 break;
                         }
                         break;

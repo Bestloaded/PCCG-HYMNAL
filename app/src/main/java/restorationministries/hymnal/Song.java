@@ -7,6 +7,7 @@ import java.util.ArrayList;
 /**
  * Created by Keno on 1/28/2017 for Hymnal
  */
+
 @Parcel
 public class Song {
     // Public classes for parcel class

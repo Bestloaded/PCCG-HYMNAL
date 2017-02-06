@@ -11,6 +11,11 @@
 -keep class br.com.mauker.MsvAuthority
 -keepclassmembers class br.com.mauker.** { *; }
 
+# Parceler library
+-keep interface org.parceler.Parcel
+-keep @org.parceler.Parcel class * { *; }
+-keep class **$$Parcelable { *; }
+
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
