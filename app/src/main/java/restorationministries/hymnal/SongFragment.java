@@ -47,7 +47,7 @@ public class SongFragment extends Fragment {
             titleText.setTextColor(Color.BLACK);
             titleText.setGravity(Gravity.CENTER);
             titleText.setText(String.format("%s - %s", songs.get(songNumber).getNumber(), songs.get(songNumber).getTitle()));
-            titleText.setPadding(0, 10, 0, 10);
+            titleText.setPadding(10, 10, 10, 10);
 
         linearLayout.addView(titleText);
 
@@ -63,7 +63,7 @@ public class SongFragment extends Fragment {
                     chorusView.setGravity(Gravity.START);
                     chorusView.setText(fromHtml("<h3>Chorus</h3>"));
                     chorusView.append(songs.get(songNumber).getChorus());
-                    chorusView.setPadding(0, 20, 0, 20);
+                    chorusView.setPadding(10, 20, 10, 20);
                 linearLayout.addView(chorusView);
             }
 
@@ -74,7 +74,7 @@ public class SongFragment extends Fragment {
                 verseView.setGravity(Gravity.START);
                 verseView.setText(fromHtml("<b>" + (i+1) + "</b><br/>"));
                 verseView.append(songs.get(songNumber).getVerses().get(i));
-                verseView.setPadding(0, 10, 0, 10);
+                verseView.setPadding(10, 10, 10, 10);
             linearLayout.addView(verseView);
         }
 
@@ -83,6 +83,7 @@ public class SongFragment extends Fragment {
                 authorView.setTextSize(14f);
                 authorView.setText(fromHtml("- <b><i>" + songs.get(songNumber).getAuthor() + "</i></b>"));
                 authorView.setGravity(Gravity.END);
+                authorView.setPadding(0, 0, 10, 0);
             linearLayout.addView(authorView);
         }
 
