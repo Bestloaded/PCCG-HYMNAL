@@ -56,4 +56,11 @@
     <string name="number">Number</string>
     <string name="name">Name</string>
     <string name="search">Search</string>
+    <string name="resize">Resize</string>
+    <string name="favourite">Favourite</string>
+    <string name="_12">12</string>
+    <string name="_14">14</string>
+    <string name="_16">16</string>
+    <string name="_18">18</string>
+    <string name="_20">20</string>
 </resources>

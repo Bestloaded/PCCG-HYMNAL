@@ -8,6 +8,9 @@ import android.text.Html;
 import android.text.Spanned;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -23,8 +26,13 @@ import java.util.ArrayList;
 
 public class SongFragment extends Fragment {
 
+    public SongFragment() {
+        setHasOptionsMenu(true);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.song_fragment, container, false);
 
         //Data for the Song
@@ -88,6 +96,47 @@ public class SongFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.song_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_favourite:
+                //Add to favourites list
+                return true;
+            case R.id.action_resize_12:
+                resizeText(12.0f);
+                return true;
+            case R.id.action_resize_14:
+                resizeText(14.0f);
+                return true;
+            case R.id.action_resize_16:
+                resizeText(16.0f);
+                return true;
+            case R.id.action_resize_18:
+                resizeText(18.0f);
+                return true;
+            case R.id.action_resize_20:
+                resizeText(20.0f);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void resizeText(float fontSize) {
+        LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.songContainer);
+        final int childCount = linearLayout.getChildCount();
+        for (int i = 1; i < childCount; i++) {
+            TextView tv = (TextView) linearLayout.getChildAt(i);
+            tv.setTextSize(fontSize);
+        }
     }
 
     @SuppressWarnings("deprecation")
