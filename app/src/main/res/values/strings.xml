@@ -58,9 +58,9 @@
     <string name="search">Search</string>
     <string name="resize">Resize</string>
     <string name="favourite">Favourite</string>
-    <string name="_12">12</string>
-    <string name="_14">14</string>
-    <string name="_16">16</string>
-    <string name="_18">18</string>
-    <string name="_20">20</string>
+    <string name="_12">Small</string>
+    <string name="_14">Normal</string>
+    <string name="_16">Medium</string>
+    <string name="_18">Large</string>
+    <string name="_20">X-Large</string>
 </resources>

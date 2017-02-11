@@ -24,6 +24,13 @@
     <style name="NoToolbar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:textViewStyle">@style/DefaultTextView</item>
     </style>
 
+    <style name="DefaultTextView" parent="android:Widget.TextView">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/off_black</item>
+    </style>
+
+    <color name="off_black">#333333</color>
 </resources>

@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
         //Creates the searchView functions
         searchView = (MaterialSearchView) findViewById(R.id.search_view);
         searchView.addSuggestions(songSuggestions);
+        searchView.adjustTintAlpha(0.75f);
         searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

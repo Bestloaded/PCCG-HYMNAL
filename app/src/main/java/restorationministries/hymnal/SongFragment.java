@@ -4,8 +4,15 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,12 +57,13 @@ public class SongFragment extends Fragment {
 
         //Create the song header
         TextView titleText = new TextView(getContext());
-            titleText.setTextSize(18f);
-            titleText.setTypeface(Typeface.DEFAULT_BOLD);
+            titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+            titleText.setTypeface(Typeface.create("sans-serif", 1));
             titleText.setTextColor(Color.BLACK);
-            titleText.setGravity(Gravity.CENTER);
+            titleText.setGravity(Gravity.START);
+            titleText.setTextColor(Color.parseColor("#0f4983"));
             titleText.setText(String.format("%s - %s", songs.get(songNumber).getNumber(), songs.get(songNumber).getTitle()));
-            titleText.setPadding(10, 10, 10, 10);
+            titleText.setPadding(30, 20, 30, 20);
 
         linearLayout.addView(titleText);
 
@@ -65,33 +73,40 @@ public class SongFragment extends Fragment {
             //TODO: Notable songs = 131......
             if (i == 1) {
                 TextView chorusView = new TextView(getContext());
-                    chorusView.setTextSize(14f);
-                    chorusView.setTypeface(Typeface.DEFAULT_BOLD);
-                    chorusView.setTextColor(Color.BLACK);
+                    chorusView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                     chorusView.setGravity(Gravity.START);
-                    chorusView.setText(fromHtml("<h3>Chorus</h3>"));
+                    SpannableStringBuilder chorus = new SpannableStringBuilder("Chorus\n");
+                    chorus.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    chorus.setSpan(new ForegroundColorSpan(Color.parseColor("#0f4983")), 0, 6, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                    chorus.setSpan(new RelativeSizeSpan(1.1f), 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    chorusView.setText(chorus);
                     chorusView.append(songs.get(songNumber).getChorus());
-                    chorusView.setPadding(10, 20, 10, 20);
+                    chorusView.setPadding(30, 20, 30, 20);
                 linearLayout.addView(chorusView);
             }
 
             TextView verseView = new TextView(getContext());
-                verseView.setTextSize(14f);
-                verseView.setTypeface(Typeface.DEFAULT);
-                verseView.setTextColor(Color.BLACK);
+                verseView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                 verseView.setGravity(Gravity.START);
-                verseView.setText(fromHtml("<b>" + (i+1) + "</b><br/>"));
+                SpannableStringBuilder verse = new SpannableStringBuilder("Verse " + (i+1) + "\n");
+                verse.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                verse.setSpan(new ForegroundColorSpan(Color.parseColor("#666666")), 0, 7, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                verse.setSpan(new RelativeSizeSpan(1.1f), 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                verseView.setText(verse);
                 verseView.append(songs.get(songNumber).getVerses().get(i));
-                verseView.setPadding(10, 10, 10, 10);
+                verseView.setPadding(30, 20, 30, 20);
             linearLayout.addView(verseView);
         }
 
         if (!songs.get(songNumber).getAuthor().equals("")) {
             TextView authorView = new TextView(getContext());
-                authorView.setTextSize(14f);
-                authorView.setText(fromHtml("- <b><i>" + songs.get(songNumber).getAuthor() + "</i></b>"));
+                authorView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                authorView.setTextColor(ContextCompat.getColor(getContext(), R.color.gray));
+                SpannableStringBuilder author = new SpannableStringBuilder("- " + songs.get(songNumber).getAuthor());
+                authorView.setText(author);
+                authorView.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD_ITALIC);
                 authorView.setGravity(Gravity.END);
-                authorView.setPadding(0, 0, 10, 0);
+                authorView.setPadding(0, 0, 30, 20);
             linearLayout.addView(authorView);
         }
 
@@ -111,31 +126,36 @@ public class SongFragment extends Fragment {
                 //Add to favourites list
                 return true;
             case R.id.action_resize_12:
-                resizeText(12.0f);
+                resizeText(12);
                 return true;
             case R.id.action_resize_14:
-                resizeText(14.0f);
+                resizeText(14);
                 return true;
             case R.id.action_resize_16:
-                resizeText(16.0f);
+                resizeText(16);
                 return true;
             case R.id.action_resize_18:
-                resizeText(18.0f);
+                resizeText(18);
                 return true;
             case R.id.action_resize_20:
-                resizeText(20.0f);
+                resizeText(20);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void resizeText(float fontSize) {
+    private void resizeText(int fontSize) {
         LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.songContainer);
         final int childCount = linearLayout.getChildCount();
-        for (int i = 1; i < childCount; i++) {
-            TextView tv = (TextView) linearLayout.getChildAt(i);
-            tv.setTextSize(fontSize);
+        for (int i = 0; i < childCount; i++) {
+            if (i == 0) {
+                TextView tv = (TextView) linearLayout.getChildAt(0);
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize + 6);
+            } else {
+                TextView tv = (TextView) linearLayout.getChildAt(i);
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+            }
         }
     }
 
